@@ -1,0 +1,74 @@
+MASTORAKIS NIKOLAOS 
+
+
+In this assignment I developed an asymmetric encryption tool in C from scratch.This tool provided RSA key-pair generation, encryption and decryption.
+
+All the tasks of this assignment where implemented successfully.
+
+TASK A
+
+Inside the rsa_keygen() I implemented the key pair generation of RSA.
+
+In this task I implemented a function named sieve_of_eratosthenes() which was given as argument an empty array of size_t ,RSA_SIEVE_LIMIT which was 255 and NULL.In this function I calculated all the prime numbers till 255.After I got all the primes and I stored them in the array prime which was returned from the function I randomly chose 2 numbers p and q.The way I chose randomly this two numbers was with srand() and rand()%size_of_primes.The rand()%size_of_primes command is used to generate random numbers in the range of [0,size_of_primes].This numbers was the index of primes array so I can get finally the two numbers p and q from array primes.The srand() function sets the starting point for producing a series of pseudo-random integers.If srand() is not called , the rand() seed is set as If srand(1) were called at program start.Any other value for seed sets the generator to a different starting point.The pseudo-random number generator should only be seeded once, before any calls to rand() and should not be reseeded every time you wish to generate a random number.After I calculated p and q it was a matters mathematic calculations to calculate n,fi(n),e and d.e was calculated in the function choose_e and d was calculated in the function mod_inverse.
+
+TASK B
+
+Inside the rsa_encrypt() function I encrypted the plaintext and in the rsa_decrypt() function I decrypted the cipher text.
+
+Logic of rsa_encrypt() function:
+At start I got the sizei of the plaintext with the help of the function getFileSize and then I extracted the plaintext of the file in a buffer with the help of the function returnPlainText.To get the two keys I used the function getPlainText_key which returns a buffer of type size_t which has only two variables since each key is 8 bytes ,we have 2 keys and the type of the buffer is size_t.In the function pow_mod() I encrypted the plaintext and returned in a buffer of size_t the encrypted text.The size of encrypted text is sizeOfPlaintext*8 since each character(1 byte) of the plaintext was encrypted to 8 bytes(size_t).After getting the buffer of the ciphertext I wrote the bytes in a file by writing each time in a for loop 8 bytes.
+
+Logic of rsa_decrypt():
+The logic of this function is similar to the rsa_encrypt() function.At start after getting the size of the plaintext I read 8 bytes each time in a while loop so I can get all the bytes of the ciphertext in a buffer.I got the key (d,e) with the same way as in the rsa_encrypt() function and the I decrypted the encrypted message.At the end of this function I write the plaintext in an output file givven as argument.
+
+TASK C
+
+
+Function declaration and details about them:
+
+size_t * sieve_of_eratosthenes(size_t* prime_final ,int limit, int *primes_sz):
+Calculation of prime numbers until number 255 and input this numbers in a returning buffer.
+
+int gcd(int a, int b):
+Calculation of greatest common denominator of numbers a and b.
+
+size_t choose_e(size_t fi_n):
+Calculation of e.
+
+size_t mod_inverse(size_t e, size_t fi_n):
+Calculation of mod_inverse.
+
+void rsa_keygen(void):
+RSA key-pair generation.
+
+
+int getFileSize(char * input_file):
+Returns the number of file 
+
+void rsa_encrypt(char *input_file, char *output_file, char *key_file):
+Encryption of input file givven a file(key_file) which contains key (e,n) and writting  encrypted file to an output file.
+
+void rsa_decrypt(char *input_file, char *output_file, char *key_file):
+Decryption of input file given a file(key_file) which contains key (d,n) and writting  decrypted file to an output file.
+
+void returnPlainText(size_t * buf,char * input_file):
+Return plain text of an input file and assigning the content in a buffer.
+
+void  pow_mod(size_t * buf3,char * buf,size_t e,size_t n,int size_of_plaintext):
+Reads each character from the plaintext and in the for loop extracts one character and passes it throught the function pow_mod_inside() which runcs the encryption algorythm for a character and returns a size_t variable which is the the "encrypted letter" and puts this letter in the buffer buf3.
+
+size_t pow_mod_inside(char data, size_t e, size_t n):
+This function is responsible for the encryption of each character.It get the character,it converts  the character to a number(size_t size) and then calculated the funcal encrypted variable of size_t (base^e * mod n ).
+
+void  pow_mod_decr(char * buf3,size_t * buf,size_t e,size_t n,int size_of_plaintext):
+The difference beetween this function and the function pow_mod is that this function is used in the decryption function and not in the encryptio.More specifically this function gets as input a buffer of type size_t which contains all the encrypted bytes and passes each time a variable of size_t to the pow_mod_inside_decr function to decrypt the encrypted character and extract the plaintext letter.
+
+
+char pow_mod_inside_decr(size_t data, size_t e, size_t n):
+This function has the same logic as the pow_mod_inside function with the difference that at the end it assigned the size_t variable to a character "ch".The reason for doint
+
+To run this assigment you should first run "make".
+
+
+gcc --version output:
+gcc (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0
